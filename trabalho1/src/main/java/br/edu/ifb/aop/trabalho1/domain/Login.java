@@ -15,7 +15,6 @@ public class Login implements Serializable {
 
     private String email;
     private String senha;
-    private String salt;
 
     @ManyToOne
     @JoinColumn(name = "id_pessoa")
