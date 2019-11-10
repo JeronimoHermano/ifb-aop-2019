@@ -1,16 +1,16 @@
 package br.edu.ifb.aop.trabalho1.resources;
 
 import br.edu.ifb.aop.trabalho1.domain.Pessoa;
+import br.edu.ifb.aop.trabalho1.domain.RegistraUsuarioDTO;
 import br.edu.ifb.aop.trabalho1.services.FormUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/form")
+@RequestMapping(value = "/forms")
 public class FormUsuarioResource {
 
     @Autowired
@@ -20,6 +20,13 @@ public class FormUsuarioResource {
     public ResponseEntity<?> find(@PathVariable Integer id) {
         Pessoa obj = service.find(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @PostMapping(value = "/registrar")
+    public Pessoa realizaRegistro(@Valid @RequestBody RegistraUsuarioDTO registroReq) {
+        Pessoa pessoa = service.save(registroReq);
+//        return new ResponseEntity<RegistraUsuarioDTO>(pessoa, HttpStatus.OK);
+        return pessoa;
     }
 
 }

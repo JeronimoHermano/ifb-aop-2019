@@ -15,7 +15,7 @@ public class Pessoa implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String nome;
+    private String nomeCompleto;
     private String telefone;
 
     @OneToMany(mappedBy = "pessoa")
@@ -25,9 +25,9 @@ public class Pessoa implements Serializable {
     public Pessoa() {
     }
 
-    public Pessoa(Integer id, String nome, String telefone) {
+    public Pessoa(Integer id, String nomeCompleto, String telefone) {
         this.id = id;
-        this.nome = nome;
+        this.nomeCompleto = nomeCompleto;
         this.telefone = telefone;
     }
 
@@ -39,12 +39,12 @@ public class Pessoa implements Serializable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeCompleto() {
+        return nomeCompleto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getTelefone() {
