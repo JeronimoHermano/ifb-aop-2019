@@ -13,7 +13,8 @@ public class Login implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String email;
+    @Column(unique = true)
+    private String login;
     private String senha;
 
     @ManyToOne
@@ -24,9 +25,9 @@ public class Login implements Serializable {
     public Login() {
     }
 
-    public Login(Integer id, String email, String senha) {
+    public Login(Integer id, String login, String senha) {
         this.id = id;
-        this.email = email;
+        this.login = login;
         this.senha = senha;
     }
 
@@ -38,12 +39,12 @@ public class Login implements Serializable {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {
@@ -68,12 +69,12 @@ public class Login implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Login login = (Login) o;
         return id.equals(login.id) &&
-                email.equals(login.email) &&
+                this.login.equals(login.login) &&
                 senha.equals(login.senha);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, senha);
+        return Objects.hash(id, login, senha);
     }
 }

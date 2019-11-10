@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Aspect
 @Component
-public class SecurityAspect {
+public class CadastroAspect {
 
     CryptSecurity cryptSecurity = CryptSecurity.getInstance();
 

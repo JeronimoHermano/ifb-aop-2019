@@ -1,5 +1,6 @@
 package br.edu.ifb.aop.trabalho1.resources;
 
+import br.edu.ifb.aop.trabalho1.domain.LoginDTO;
 import br.edu.ifb.aop.trabalho1.domain.Pessoa;
 import br.edu.ifb.aop.trabalho1.domain.RegistraUsuarioDTO;
 import br.edu.ifb.aop.trabalho1.services.FormUsuarioService;
@@ -23,10 +24,15 @@ public class FormUsuarioResource {
     }
 
     @PostMapping(value = "/registrar")
-    public Pessoa realizaRegistro(@Valid @RequestBody RegistraUsuarioDTO registroReq) {
-        Pessoa pessoa = service.save(registroReq);
+    public Pessoa realizaRegistro(@Valid @RequestBody RegistraUsuarioDTO dto) {
+        Pessoa pessoa = service.save(dto);
 //        return new ResponseEntity<RegistraUsuarioDTO>(pessoa, HttpStatus.OK);
         return pessoa;
+    }
+
+    @PostMapping(value = "/login")
+    public Pessoa login(@Valid @RequestBody LoginDTO dto) {
+        return service.login(dto).getPessoa();
     }
 
 }

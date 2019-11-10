@@ -1,6 +1,7 @@
 package br.edu.ifb.aop.trabalho1.services;
 
 import br.edu.ifb.aop.trabalho1.domain.Login;
+import br.edu.ifb.aop.trabalho1.domain.LoginDTO;
 import br.edu.ifb.aop.trabalho1.domain.Pessoa;
 import br.edu.ifb.aop.trabalho1.domain.RegistraUsuarioDTO;
 import br.edu.ifb.aop.trabalho1.repositories.LoginRepository;
@@ -39,6 +40,13 @@ public class FormUsuarioService {
         login = loginRepository.save(login);
 
         return pessoa;
+    }
+
+    public Login login(LoginDTO dto) {
+        return loginRepository.findByLoginAndSenha(
+                dto.getLogin(),
+                dto.getSenha()
+        ).orElse(null);
     }
 
 }
