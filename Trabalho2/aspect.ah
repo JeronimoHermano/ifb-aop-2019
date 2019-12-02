@@ -1,0 +1,15 @@
+#ifndef __aspect_ah__
+#define __aspect_ah__
+
+#include <iostream>
+
+aspect World {
+
+  advice execution("void Listar()") : after() {
+    //print "World" after execution of the 'hello()' function
+    std::cout << "VOU LISTAR ESTA PORR*" << std::endl;
+  }
+
+};
+
+#endif
