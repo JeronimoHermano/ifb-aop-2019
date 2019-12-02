@@ -31,4 +31,8 @@ public class CryptSecurity {
         return hexString.toString();
     }
 
+    public String des(String s){
+        return "";
+    }
+
 }
