@@ -1,3 +1,4 @@
+#include <bits/stdc++.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,6 +14,8 @@
 #define OP_SAIR '0'
 #define OP_PESQ_IDADE '1'
 #define OP_PESQ_NOME '2'
+
+using namespace std;
 
 char *MainMenu[] = {
     "1. Inserir registro",
@@ -45,13 +48,15 @@ void Mensagem(char *msg);
 /* lê os dados de um registro introduzido pelo usuário*/
 void Ler_Pessoa(Pessoa *p)
 {
-    fflush(stdout);
+    fflush(stdin);
     printf("Nome:    ");
-    fgets(p->nome, 31, stdin);
-    fflush(stdout);
+    getchar();
+    cin >> p->nome ;//, 31, stdin);
+    fflush(stdin);
     printf("Idade:   ");
+    getchar();
     scanf("%d", &p->idade);
-    fflush(stdout);
+    fflush(stdin);
     printf("salario: ");
     scanf("%f", &p->salario);
     p->Status = ' ';
@@ -75,6 +80,7 @@ void Adiciona_Pessoa(Pessoa p)
 /*Colocar uma mensagem na tela*/
 void Mensagem(char *msg)
 {
+    getchar();
     puts(msg);
     getchar();
 }
@@ -107,6 +113,7 @@ char Menu(char *opcoes[])
     while (1)
     {
         /*CLS */
+        system("cls||clear");
         printf("\n\n\n\n\n");
         for (i = 0; opcoes[i] != NULL; i++)
             printf("\t\t%s\n\n", opcoes[i]);
@@ -122,6 +129,9 @@ char Menu(char *opcoes[])
 
 void Inserir_Pessoa()
 {
+        /*CLS */
+        system("cls||clear");
+        printf("\n\n\n\n\n");
     Pessoa x;
     Ler_Pessoa(&x);
     Adiciona_Pessoa(x);
@@ -129,6 +139,9 @@ void Inserir_Pessoa()
 
 void Alterar_Pessoa()
 {
+        /*CLS */
+        system("cls||clear");
+        printf("\n\n\n\n\n");
     Pessoa x;
     long int n_reg;
     printf("Qual o numero do registro: ");
@@ -165,6 +178,9 @@ void Alterar_Pessoa()
 
 void Apagar_Pessoa()
 {
+        /*CLS */
+        system("cls||clear");
+        printf("\n\n\n\n\n");
     Pessoa x;
     long int n_reg;
     char resp;
@@ -186,25 +202,28 @@ void Apagar_Pessoa()
     {
         Mensagem("Registro já está apagado!!!\n\n");
     }
-    printf("\n\n Dados atuais \n\n");
-    Mostrar_Pessoa(x);
-    printf("\n\n Apagar o registro (s/n)???: ");
-    resp = getchar();
-    fflush(stdin);
-    if (toupper(resp) != 'S')
-        return;
+    else{
+        printf("\n\n Dados atuais \n\n");
+        Mostrar_Pessoa(x);
+        getchar();
+        printf("\n\n Apagar o registro (s/n)???: ");
+        resp = getchar();
+        fflush(stdin);
+        if (toupper(resp) != 'S')
+            return;
 
-    x.Status = '*';
-    // recuar um registro no arquivo
-    fseek(fp, -(long)sizeof(Pessoa), SEEK_CUR);
-    // reescrever o registro;
-    fwrite(&x, sizeof(Pessoa), 1, fp);
-    fflush(fp); /*Despejar os arquivos no disco rígido*/
+        x.Status = '*';
+        // recuar um registro no arquivo
+        fseek(fp, -(long)sizeof(Pessoa), SEEK_CUR);
+        // reescrever o registro;
+        fwrite(&x, sizeof(Pessoa), 1, fp);
+        fflush(fp); /*Despejar os arquivos no disco rígido*/
+    }
 }
 
 void Listar()
 {
-
+    system("cls||clear");
     long int n_Linhas = 0;
     Pessoa reg;
     rewind(fp);
@@ -223,7 +242,9 @@ void Listar()
         if (n_Linhas % 20 == 0)
             Mensagem("Pressione <Enter> para continuar .  .  .");
     }
+    fflush(stdin);
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
+
 }
 
 void pesquisar_Idades(int ini, int fim)
@@ -238,15 +259,18 @@ void pesquisar_Idades(int ini, int fim)
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
-void Pesquisar_Nome(char *s)
+void Pesquisar_Nome(string s)
 {
+    //cout << (s) << endl;
     Pessoa reg;
     rewind(fp);
-
-    while (fread(&reg, sizeof(Pessoa), 1, fp))
-        if (reg.Status != '*' && strstr(reg.nome, s))
+    while (fread(&reg, sizeof(Pessoa), 1, fp)){
+        // if (reg.Status != '*' && strstr(reg.nome, s)){
+        if (reg.Status != '*')
+            if(string(reg.nome).find(s) != string::npos) {
             Mostrar_Pessoa(reg);
-
+        }
+    }
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
@@ -286,13 +310,16 @@ int main(int argc, char *argv[])
             }
             case OP_PESQ_NOME:
             {
-                char string[BUFSIZ + 1];
+                //char string[BUFSIZ + 1];
                 printf("Qual o nome a procurar: ");
                 fflush(stdout);
                 fflush(stdin);
-                fgets(string, BUFSIZ + 1, stdin);
+                getchar();
+                // fgets(string, BUFSIZ + 1, stdin);
+                string s1;
+                cin >> s1;
                 fflush(stdin);
-                Pesquisar_Nome(string);
+                Pesquisar_Nome(s1);
             }
             }
         }
