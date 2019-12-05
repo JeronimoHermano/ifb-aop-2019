@@ -5,7 +5,7 @@
 
 aspect AspectoSeguranca {
   //pointcut pesquisa
-  pointcut pesquisa() = "%pesquisar_...%(...)"
+  pointcut pesquisa() = "% pesquisar_...::%(...)";
 
   advice execution(pesquisa()) : before() {
     std::cout << "VC CAIU NO POINTCUT DE PESQUISA, VOU PESQUISAR O QUE VOCÊ MANDOU!!!! PORR*" << std::endl;
