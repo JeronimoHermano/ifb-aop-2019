@@ -14,6 +14,7 @@
 #define OP_SAIR '0'
 #define OP_PESQ_IDADE '1'
 #define OP_PESQ_NOME '2'
+#define OP_PESQ_SALARIO '3'
 
 using namespace std;
 
@@ -30,6 +31,7 @@ char *MainMenu[] = {
 char *PesqMenu[] = {
     "1. Pesquisar por intervalo de idades",
     "2. Pesquisar por nome",
+    "3. Pesquisar por salario",
     NULL /* ACABARAM AS OPÇÕES*/
 };
 
@@ -251,26 +253,57 @@ void pesquisar_Idades(int ini, int fim)
 {
     Pessoa reg;
     rewind(fp);
-
-    while (fread(&reg, sizeof(Pessoa), 1, fp))
-        if (reg.Status != '*' && reg.idade >= ini && reg.idade <= fim)
+    bool encontrado = false;
+    while (fread(&reg, sizeof(Pessoa), 1, fp)){
+        if (reg.Status != '*' && reg.idade >= ini && reg.idade <= fim){
             Mostrar_Pessoa(reg);
+            encontrado = true;
+        }
+    }
+    if(!encontrado){
+        puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
+    }
+    
+    Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
+    
+}
 
+void pesquisar_Salario(float ini, float fim)
+{
+    Pessoa reg;
+    rewind(fp);
+    bool encontrado = false;
+    while (fread(&reg, sizeof(Pessoa), 1, fp)){
+        if (reg.Status != '*' && reg.salario >= ini && reg.salario <= fim){
+            Mostrar_Pessoa(reg);
+            encontrado = true;
+        }
+    }
+    if(!encontrado){
+        puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
+    }
+    
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
-void Pesquisar_Nome(string s)
+void pesquisar_Nome(string s)
 {
     //cout << (s) << endl;
     Pessoa reg;
     rewind(fp);
+    bool encontrado = false;
     while (fread(&reg, sizeof(Pessoa), 1, fp)){
         // if (reg.Status != '*' && strstr(reg.nome, s)){
         if (reg.Status != '*')
             if(string(reg.nome).find(s) != string::npos) {
             Mostrar_Pessoa(reg);
+            encontrado = true;
         }
     }
+    if(!encontrado){
+        puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
+    }
+    
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
@@ -299,28 +332,39 @@ int main(int argc, char *argv[])
             opcao = Menu(PesqMenu);
             switch (opcao)
             {
-            case OP_PESQ_IDADE:
-            {
-                int n1, n2;
-                printf("Qual o intervalo de idades: ");
-                scanf("%d%d", &n1, &n2);
-                fflush(stdin);
-                pesquisar_Idades(n1, n2);
-                break;
-            }
-            case OP_PESQ_NOME:
-            {
-                //char string[BUFSIZ + 1];
-                printf("Qual o nome a procurar: ");
-                fflush(stdout);
-                fflush(stdin);
-                getchar();
-                // fgets(string, BUFSIZ + 1, stdin);
-                string s1;
-                cin >> s1;
-                fflush(stdin);
-                Pesquisar_Nome(s1);
-            }
+                case OP_PESQ_IDADE:
+                {
+                    int n1, n2;
+                    printf("Qual o intervalo de idades: ");
+                    scanf("%d%d", &n1, &n2);
+                    fflush(stdin);
+                    pesquisar_Idades(n1, n2);
+                    break;
+                }
+                case OP_PESQ_NOME:
+                {
+                    //char string[BUFSIZ + 1];
+                    printf("Qual o nome a procurar: ");
+                    fflush(stdout);
+                    fflush(stdin);
+                    //TODO verificar se este getchar ta pulando letra
+                    getchar();
+                    // fgets(string, BUFSIZ + 1, stdin);
+                    string s1;
+                    cin >> s1;
+                    fflush(stdin);
+                    pesquisar_Nome(s1);
+                    break;
+                }
+                case OP_PESQ_SALARIO:
+                {
+                    float n1, n2;
+                    printf("Qual o intervalo de salarios: ");
+                    scanf("%f%f", &n1, &n2);
+                    fflush(stdin);
+                    pesquisar_Salario(n1, n2);
+                    break;
+                }
             }
         }
 
