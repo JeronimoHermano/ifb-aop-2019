@@ -116,12 +116,15 @@ char Menu(vector<string> opcoes)
         for (auto op : opcoes)
             cout << "\t\t" << op << "\n\n";
 
-        printf("\n\n\t\tOpcao: ");
+        printf("\n\t\tOpcao: ");
+        // getchar();
         ch = getchar();
         fflush(stdin);
         for (auto op : opcoes)
             if (op[0] == ch)
                 return ch;
+        //cout << "\t\t Opcao incorreta \n\n";
+        //getchar();
     }
 }
 
@@ -245,7 +248,7 @@ void Listar()
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
-void pesquisar_Idades(int ini, int fim)
+bool pesquisar_Idades(int ini, int fim)
 {
     Pessoa reg;
     rewind(fp);
@@ -258,12 +261,7 @@ void pesquisar_Idades(int ini, int fim)
             encontrado = true;
         }
     }
-    if (!encontrado)
-    {
-        puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
-    }
-
-    Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
+    return encontrado;
 }
 
 void pesquisar_Salario(float ini, float fim)

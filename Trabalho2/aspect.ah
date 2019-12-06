@@ -40,59 +40,66 @@ bool login()
 }
 } // namespace aloha
 
-aspect AspectoSeguranca
-{
+aspect AspectoSeguranca{
   //pointcut pesquisa
   // pointcut pesquisa() = "%pesquisar_...::%(...)";
-  pointcut pesquisa() = execution("% pesquisar_Idades::%(...)");
+  //pointcut pesquisa() = "% pesquisar_Idades::%(...)";
 
-  advice pesquisa() : before()
-  {
-    std::cout << "VC CAIU NO POINTCUT DE PESQUISA, VOU PESQUISAR O QUE VOCÊ MANDOU!!!! PORR*" << std::endl;
-  }
+  //advice execution(pesquisa()) && result(resp) : after(bool *resp)
+  advice execution("bool pesquisar_...(...)") && result(respo) : after(bool respo){
+                                                     getchar();
+bool resp = false;
+if (!respo)
+{
+  puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
+}
 
-  advice execution("void Listar()") : before()
-  {
-    std::cout << "VOU LISTAR ESTA PORR*" << std::endl;
-    getchar();
-  }
+Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
+}
 
-  //decriptografar antes de abrir
-  advice execution("void Inic()") : before()
-  {
-    //std::cout << "Pedir senha, decriptografar arquivo Dados.crypt criando arquivo Dados.dat" << std::endl;
-    while (!aloha::login())
-    {
-      std::cout << "Usuario ou Senha errado" << std::endl;
-    }
-  }
+advice execution("void Listar()") : before()
+{
+  //std::cout << "VOU LISTAR" << std::endl;
+  puts("OI");
+}
 
-  //criptografar ao final (se falhar a execução pode dar merda, melhor pedir senha para entrar no programa e criptografar a senha)
-  advice execution("int main(...)") : after()
+//decriptografar antes de abrir
+advice execution("void Inic()") : before()
+{
+  //std::cout << "Pedir senha, decriptografar arquivo Dados.crypt criando arquivo Dados.dat" << std::endl;
+  while (!aloha::login())
   {
-    std::cout << "Criptografar arquivo Dados.dat criando Dados.crypt e apagando o anterior" << std::endl;
+    std::cout << "Usuario ou Senha errado" << std::endl;
   }
+}
 
-  //Conferir dados da Pessoa
-  advice execution("int Ler_Pessoa(...)") && args(x) : after(Pessoa * x)
+//criptografar ao final (se falhar a execução pode dar merda, melhor pedir senha para entrar no programa e criptografar a senha)
+advice execution("int main(...)") : after()
+{
+  std::cout << "Criptografar arquivo Dados.dat criando Dados.crypt e apagando o anterior" << std::endl;
+}
+
+//Conferir dados da Pessoa
+advice execution("void Ler_Pessoa(...)") && args(x) : after(Pessoa * x)
+{
+  std::cout << "Verificando dados..." << std::endl;
+  bool errado = false;
+  if (x->idade <= 0)
   {
-    std::cout << "Verificando dados..." << std::endl;
-    bool errado = false;
-    if (x->idade <= 0)
-    {
-      std::cout << "Idade não pode ser menor que 0" << std::endl;
-      errado = true;
-    }
-    if (x->salario <= 0.0)
-    {
-      std::cout << "Salario não pode ser menor que 0.0" << std::endl;
-      errado = true;
-    }
-    if (errado)
-    {
-      Ler_Pessoa(x);
-    }
+    std::cout << "Idade não pode ser menor que 0" << std::endl;
+    errado = true;
   }
-};
+  if (x->salario <= 0.0)
+  {
+    std::cout << "Salario não pode ser menor que 0.0" << std::endl;
+    errado = true;
+  }
+  if (errado)
+  {
+    Ler_Pessoa(x);
+  }
+}
+}
+;
 
 #endif
