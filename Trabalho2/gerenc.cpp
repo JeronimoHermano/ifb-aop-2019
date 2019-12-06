@@ -76,10 +76,10 @@ void Adiciona_Pessoa(Pessoa p)
 }
 
 /*Colocar uma mensagem na tela*/
-void Mensagem(char *msg)
+void Mensagem(string msg)
 {
     getchar();
-    puts(msg);
+    cout << msg << endl;
     getchar();
 }
 

@@ -2,6 +2,43 @@
 #define __aspect_ah__
 
 #include <iostream>
+#include <string>
+
+namespace aloha
+{
+typedef struct
+{
+  char user[30];
+  char password[20];
+} TipoSystem;
+
+//Login
+bool login()
+{
+  FILE *arq = fopen("start.bin", "rb");
+  if (!arq)
+  {
+    puts("Erro na leitura de start.bin");
+    exit(0);
+  }
+  TipoSystem sistema;
+  fread(&sistema, sizeof(TipoSystem), 1, arq);
+  fclose(arq);
+  // return sistema;
+  std::string usuario, senha;
+  std::cout << "USUARIO: ";
+  std::cin >> usuario;
+  std::cout << "SENHA: ";
+  std::cin >> senha;
+
+  if (usuario.compare(std::string(sistema.user)) == 0 && senha.compare(std::string(sistema.password)) == 0)
+  {
+    puts("SENHA CERTA");
+    return true;
+  }
+  return false;
+}
+} // namespace aloha
 
 aspect AspectoSeguranca
 {
@@ -17,12 +54,17 @@ aspect AspectoSeguranca
   advice execution("void Listar()") : before()
   {
     std::cout << "VOU LISTAR ESTA PORR*" << std::endl;
+    getchar();
   }
 
   //decriptografar antes de abrir
   advice execution("void Inic()") : before()
   {
-    std::cout << "Pedir senha, decriptografar arquivo Dados.crypt criando arquivo Dados.dat" << std::endl;
+    //std::cout << "Pedir senha, decriptografar arquivo Dados.crypt criando arquivo Dados.dat" << std::endl;
+    while (!aloha::login())
+    {
+      std::cout << "Usuario ou Senha errado" << std::endl;
+    }
   }
 
   //criptografar ao final (se falhar a execução pode dar merda, melhor pedir senha para entrar no programa e criptografar a senha)
