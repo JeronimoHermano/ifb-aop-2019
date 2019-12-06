@@ -3,45 +3,54 @@
 
 #include <iostream>
 
-aspect AspectoSeguranca {
+aspect AspectoSeguranca
+{
   //pointcut pesquisa
-  pointcut pesquisa() = "% pesquisar_...::%(...)";
+  // pointcut pesquisa() = "%pesquisar_...::%(...)";
+  pointcut pesquisa() = execution("% pesquisar_Idades::%(...)");
 
-  advice execution(pesquisa()) : before() {
+  advice pesquisa() : before()
+  {
     std::cout << "VC CAIU NO POINTCUT DE PESQUISA, VOU PESQUISAR O QUE VOCÊ MANDOU!!!! PORR*" << std::endl;
   }
 
-  advice execution("void Listar()") : before() {
+  advice execution("void Listar()") : before()
+  {
     std::cout << "VOU LISTAR ESTA PORR*" << std::endl;
   }
 
   //decriptografar antes de abrir
-  advice execution("void Inic()") : before() {
+  advice execution("void Inic()") : before()
+  {
     std::cout << "Pedir senha, decriptografar arquivo Dados.crypt criando arquivo Dados.dat" << std::endl;
   }
 
   //criptografar ao final (se falhar a execução pode dar merda, melhor pedir senha para entrar no programa e criptografar a senha)
-  advice execution("int main(...)") : after() {
+  advice execution("int main(...)") : after()
+  {
     std::cout << "Criptografar arquivo Dados.dat criando Dados.crypt e apagando o anterior" << std::endl;
   }
 
   //Conferir dados da Pessoa
-  advice execution("int Ler_Pessoa(...)") && args(&x) : after(Pessoa** x) {
+  advice execution("int Ler_Pessoa(...)") && args(x) : after(Pessoa * x)
+  {
     std::cout << "Verificando dados..." << std::endl;
     bool errado = false;
-    if(*x->idade<=0){
+    if (x->idade <= 0)
+    {
       std::cout << "Idade não pode ser menor que 0" << std::endl;
       errado = true;
     }
-    if(*x->salario<=0.0){
+    if (x->salario <= 0.0)
+    {
       std::cout << "Salario não pode ser menor que 0.0" << std::endl;
       errado = true;
     }
-    if (errado){
+    if (errado)
+    {
       Ler_Pessoa(x);
     }
   }
-
 };
 
 #endif

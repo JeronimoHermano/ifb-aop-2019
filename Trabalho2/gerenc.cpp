@@ -18,22 +18,18 @@
 
 using namespace std;
 
-char *MainMenu[] = {
+vector<string> MainMenu = {
     "1. Inserir registro",
     "2. Alterar registro",
     "3. Apagar registro",
     "4. Listar registros",
     "5. Pesquisar",
-    "0. Sair",
-    NULL /* ACABARAM AS OPÇÕES*/
-};
+    "0. Sair"};
 
-char *PesqMenu[] = {
+vector<string> PesqMenu = {
     "1. Pesquisar por intervalo de idades",
     "2. Pesquisar por nome",
-    "3. Pesquisar por salario",
-    NULL /* ACABARAM AS OPÇÕES*/
-};
+    "3. Pesquisar por salario"};
 
 FILE *fp; /*variável global pois é útil ao longo do programa*/
 
@@ -45,7 +41,7 @@ typedef struct
     char Status; /* '*' indica que o registro está apagado*/
 } Pessoa;
 
-void Mensagem(char *msg);
+void Mensagem(string msg);
 
 /* lê os dados de um registro introduzido pelo usuário*/
 void Ler_Pessoa(Pessoa *p)
@@ -53,7 +49,7 @@ void Ler_Pessoa(Pessoa *p)
     fflush(stdin);
     printf("Nome:    ");
     getchar();
-    cin >> p->nome ;//, 31, stdin);
+    cin >> p->nome; //, 31, stdin);
     fflush(stdin);
     printf("Idade:   ");
     getchar();
@@ -108,7 +104,7 @@ void Inic()
 seleciona a opção, usando o primeiro caracter de cada string.
 devolve o primeiro caracter da opção.
 */
-char Menu(char *opcoes[])
+char Menu(vector<string> opcoes)
 {
     int i;
     char ch;
@@ -117,23 +113,23 @@ char Menu(char *opcoes[])
         /*CLS */
         system("cls||clear");
         printf("\n\n\n\n\n");
-        for (i = 0; opcoes[i] != NULL; i++)
-            printf("\t\t%s\n\n", opcoes[i]);
+        for (auto op : opcoes)
+            cout << "\t\t" << op << "\n\n";
 
         printf("\n\n\t\tOpcao: ");
         ch = getchar();
         fflush(stdin);
-        for (i = 0; opcoes[i] != NULL; i++)
-            if (opcoes[i][0] == ch)
+        for (auto op : opcoes)
+            if (op[0] == ch)
                 return ch;
     }
 }
 
 void Inserir_Pessoa()
 {
-        /*CLS */
-        system("cls||clear");
-        printf("\n\n\n\n\n");
+    /*CLS */
+    system("cls||clear");
+    printf("\n\n\n\n\n");
     Pessoa x;
     Ler_Pessoa(&x);
     Adiciona_Pessoa(x);
@@ -141,9 +137,9 @@ void Inserir_Pessoa()
 
 void Alterar_Pessoa()
 {
-        /*CLS */
-        system("cls||clear");
-        printf("\n\n\n\n\n");
+    /*CLS */
+    system("cls||clear");
+    printf("\n\n\n\n\n");
     Pessoa x;
     long int n_reg;
     printf("Qual o numero do registro: ");
@@ -180,9 +176,9 @@ void Alterar_Pessoa()
 
 void Apagar_Pessoa()
 {
-        /*CLS */
-        system("cls||clear");
-        printf("\n\n\n\n\n");
+    /*CLS */
+    system("cls||clear");
+    printf("\n\n\n\n\n");
     Pessoa x;
     long int n_reg;
     char resp;
@@ -204,7 +200,8 @@ void Apagar_Pessoa()
     {
         Mensagem("Registro já está apagado!!!\n\n");
     }
-    else{
+    else
+    {
         printf("\n\n Dados atuais \n\n");
         Mostrar_Pessoa(x);
         getchar();
@@ -246,7 +243,6 @@ void Listar()
     }
     fflush(stdin);
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
-
 }
 
 void pesquisar_Idades(int ini, int fim)
@@ -254,18 +250,20 @@ void pesquisar_Idades(int ini, int fim)
     Pessoa reg;
     rewind(fp);
     bool encontrado = false;
-    while (fread(&reg, sizeof(Pessoa), 1, fp)){
-        if (reg.Status != '*' && reg.idade >= ini && reg.idade <= fim){
+    while (fread(&reg, sizeof(Pessoa), 1, fp))
+    {
+        if (reg.Status != '*' && reg.idade >= ini && reg.idade <= fim)
+        {
             Mostrar_Pessoa(reg);
             encontrado = true;
         }
     }
-    if(!encontrado){
+    if (!encontrado)
+    {
         puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
     }
-    
+
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
-    
 }
 
 void pesquisar_Salario(float ini, float fim)
@@ -273,16 +271,19 @@ void pesquisar_Salario(float ini, float fim)
     Pessoa reg;
     rewind(fp);
     bool encontrado = false;
-    while (fread(&reg, sizeof(Pessoa), 1, fp)){
-        if (reg.Status != '*' && reg.salario >= ini && reg.salario <= fim){
+    while (fread(&reg, sizeof(Pessoa), 1, fp))
+    {
+        if (reg.Status != '*' && reg.salario >= ini && reg.salario <= fim)
+        {
             Mostrar_Pessoa(reg);
             encontrado = true;
         }
     }
-    if(!encontrado){
+    if (!encontrado)
+    {
         puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
     }
-    
+
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
@@ -292,18 +293,21 @@ void pesquisar_Nome(string s)
     Pessoa reg;
     rewind(fp);
     bool encontrado = false;
-    while (fread(&reg, sizeof(Pessoa), 1, fp)){
+    while (fread(&reg, sizeof(Pessoa), 1, fp))
+    {
         // if (reg.Status != '*' && strstr(reg.nome, s)){
         if (reg.Status != '*')
-            if(string(reg.nome).find(s) != string::npos) {
-            Mostrar_Pessoa(reg);
-            encontrado = true;
-        }
+            if (string(reg.nome).find(s) != string::npos)
+            {
+                Mostrar_Pessoa(reg);
+                encontrado = true;
+            }
     }
-    if(!encontrado){
+    if (!encontrado)
+    {
         puts("\n Não foi encontrado nenhum registro!"); /*Não encontrou nada*/
     }
-    
+
     Mensagem("\n\n Pressione <Enter> para continuar .  .  ."); /*No fim da listagem*/
 }
 
@@ -332,39 +336,39 @@ int main(int argc, char *argv[])
             opcao = Menu(PesqMenu);
             switch (opcao)
             {
-                case OP_PESQ_IDADE:
-                {
-                    int n1, n2;
-                    printf("Qual o intervalo de idades: ");
-                    scanf("%d%d", &n1, &n2);
-                    fflush(stdin);
-                    pesquisar_Idades(n1, n2);
-                    break;
-                }
-                case OP_PESQ_NOME:
-                {
-                    //char string[BUFSIZ + 1];
-                    printf("Qual o nome a procurar: ");
-                    fflush(stdout);
-                    fflush(stdin);
-                    //TODO verificar se este getchar ta pulando letra
-                    getchar();
-                    // fgets(string, BUFSIZ + 1, stdin);
-                    string s1;
-                    cin >> s1;
-                    fflush(stdin);
-                    pesquisar_Nome(s1);
-                    break;
-                }
-                case OP_PESQ_SALARIO:
-                {
-                    float n1, n2;
-                    printf("Qual o intervalo de salarios: ");
-                    scanf("%f%f", &n1, &n2);
-                    fflush(stdin);
-                    pesquisar_Salario(n1, n2);
-                    break;
-                }
+            case OP_PESQ_IDADE:
+            {
+                int n1, n2;
+                printf("Qual o intervalo de idades: ");
+                scanf("%d%d", &n1, &n2);
+                fflush(stdin);
+                pesquisar_Idades(n1, n2);
+                break;
+            }
+            case OP_PESQ_NOME:
+            {
+                //char string[BUFSIZ + 1];
+                printf("Qual o nome a procurar: ");
+                fflush(stdout);
+                fflush(stdin);
+                //TODO verificar se este getchar ta pulando letra
+                getchar();
+                // fgets(string, BUFSIZ + 1, stdin);
+                string s1;
+                cin >> s1;
+                fflush(stdin);
+                pesquisar_Nome(s1);
+                break;
+            }
+            case OP_PESQ_SALARIO:
+            {
+                float n1, n2;
+                printf("Qual o intervalo de salarios: ");
+                scanf("%f%f", &n1, &n2);
+                fflush(stdin);
+                pesquisar_Salario(n1, n2);
+                break;
+            }
             }
         }
 
